@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script src="https://kit.fontawesome.com/a14ae32021.js" crossorigin="anonymous"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PROVAAAAA</title>
+
+<style type="text/css">
+@font-face {
+	font-family: digit;
+	src: url('digital-7_mono.ttf') format("truetype");
+}
+/* slightly larger main text for readability */
+#code{font-size:36px;line-height:1.6}
+</style>
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/garden.js"></script>
+<script type="text/javascript" src="js/functions.js"></script>
+
+</head>
+
+<body>
+
+<div id="mainDiv">
+	<div id="content">
+		<div id="code">
+			<span class="space"/><span class="comments">Un pensierino per te!</span><br />
+			EI MATI !<br />
+			Do you remember the day we first met?<br />
+			<span class="comments">The ET-LAB Friday.</span><br />
+			Since that day a spark begun;<br />
+			<span class="comments">Your face Your Voice Your Words.</span><br />
+			Your everything got imprinted in my heart;<br />
+			As the time went on;<br />
+			The Bond grew stronger and stronger;<br />
+			Journey from Infatuation to Love;<br />
+			We have traveled a long way together;<br />
+			There have been fights ;<br />
+			<span class="comments">And I'm sure there will be more.</span><br />
+			But our Bond will always grow back Stronger;<br />
+			<br>
+			<br>
+			All I want to say is:<br />
+			Baby, I will love you forever;<br />
+			<br>
+			<br>
+			Se vuoi darmi un bacetto premi sul cuore qui sotto<br />
+			<br>
+			<span id="heartspan">
+			<a href="image.jpg"><i class="fas fa-heart" id="icon"></i></a>
+			</span>
+		</div>
+		<div id="loveHeart">
+			<canvas id="garden"></canvas>
+			<div id="words">
+				<div id="messages">
+					    Ti amo da:
+					<div id="elapseClock"></div>
+				</div>
+				<div id="loveu">
+					Ti amo tantissimo!<br/>
+					<div class="signature">- Il tuo Lolli</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+			<!-- Floating audio player -->
+			<style>
+			.audio-player{position:fixed;left:16px;bottom:16px;background:rgba(0,0,0,0.6);color:#fff;padding:8px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;z-index:9999;font-family:Arial,Helvetica,sans-serif}
+			.audio-player button{background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer}
+			.audio-player .title{font-size:14px;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+			.enable-sound-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:#fff;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:13px}
+			</style>
+
+			<div class="audio-player" id="audioPlayer">
+				<button id="audioToggle" aria-label="Play/Pause">▶️</button>
+				<button id="enableAudioBtn" class="enable-sound-btn" style="display:none" aria-label="Cliccami!🎵🔊">Cliccami!🎵🔊</button>
+				<div class="title"></div>
+				<!-- use data-src and set encoded src from JS to handle spaces/parentheses -->
+				<audio id="bgAudio" data-src="The Police - Every Breath You Take (Official Music Video).mp3" preload="auto" autoplay muted loop></audio>
+			</div>
+
+			<script>
+				(function(){
+					var audio = document.getElementById('bgAudio');
+					var btn = document.getElementById('audioToggle');
+					var enableBtn = document.getElementById('enableAudioBtn');
+					var raw = audio.getAttribute('data-src') || '';
+					try{ audio.src = encodeURI(raw); }catch(e){ audio.src = raw; }
+
+					function updateButton(){ btn.textContent = audio.paused ? '▶️' : '⏸️'; }
+
+					btn.addEventListener('click', function(){
+						if(audio.paused){ audio.play().catch(function(){}); }
+						else{ audio.pause(); }
+						updateButton();
+					});
+
+					enableBtn.addEventListener('click', function(){
+						audio.muted = false;
+						audio.play().then(function(){
+							try{ localStorage.setItem('audio_allowed','1'); }catch(e){}
+							enableBtn.style.display = 'none';
+							updateButton();
+						}).catch(function(){
+							enableBtn.textContent = 'Click again to enable';
+						});
+					});
+
+					audio.addEventListener('play', updateButton);
+					audio.addEventListener('pause', updateButton);
+
+					// Try autoplay (muted). If allowed, try to unmute; otherwise show enable button.
+					var tryP = audio.play();
+					if(tryP !== undefined){
+						tryP.then(function(){
+							// playback started (likely muted). Try to unmute — may be blocked by browser
+							try{ audio.muted = false; audio.volume = 1; }catch(e){}
+							setTimeout(function(){ if(audio.muted || audio.volume===0){ enableBtn.style.display='inline-block'; } }, 250);
+						}).catch(function(){
+							// autoplay blocked
+							enableBtn.style.display = 'inline-block';
+						});
+					} else {
+						// older browsers
+						enableBtn.style.display = 'inline-block';
+					}
+
+					// If user previously allowed, try to unmute automatically
+					try{ if(localStorage.getItem('audio_allowed') === '1'){ audio.muted = false; audio.play().catch(function(){ enableBtn.style.display='inline-block'; }); } }catch(e){}
+
+					updateButton();
+				})();
+			</script>
+
+			<!-- Love visual textures and animations -->
+			<style>
+			/* subtle animated gradient texture */
+			.love-bg {
+				position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.08;
+				background: linear-gradient(120deg, #ff9a9e 0%, #fad0c4 50%, #fbc2eb 100%);
+				background-size: 300% 300%;
+				animation: loveGradient 20s ease-in-out infinite;
+			}
+			@keyframes loveGradient{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+			/* pulsing heart icon */
+			#icon{ transition: transform .2s ease; transform-origin:center; }
+			#heartspan{display:inline-block;position:relative;left:18px}
+			#icon.pulse{ animation: pulseHeart 1.6s infinite; }
+			@keyframes pulseHeart{ 0%{transform:scale(1)} 50%{transform:scale(1.08)} 100%{transform:scale(1)} }
+
+			/* floating heart particles */
+			.heart-particle{
+				position:fixed; left:0; top:0; pointer-events:none; z-index:9998; font-size:20px; line-height:1;
+				will-change: transform, opacity;
+				text-shadow:0 2px 6px rgba(0,0,0,0.25);
+			}
+			@keyframes floatUp{
+				to{ transform: translateY(-360px) translateX(30px) rotate(20deg) scale(0.6); opacity:0 }
+			}
+
+			/* gentle tiny hearts that drift */
+			.tiny-heart{ font-size:12px; opacity:0.9 }
+			</style>
+
+			<div class="love-bg" aria-hidden="true"></div>
+
+			<script>
+			// Heart particle helper
+			function spawnHeart(x, y, size, color, lifetime){
+				var el = document.createElement('div');
+				el.className = 'heart-particle';
+				el.style.left = (x - size/2) + 'px';
+				el.style.top = (y - size/2) + 'px';
+				el.style.fontSize = size + 'px';
+				el.style.color = color || '#ff6b81';
+				el.innerText = '❤';
+				document.body.appendChild(el);
+				// random horizontal drift
+				var dx = (Math.random()-0.5) * 80;
+				var rot = (Math.random()-0.5)*60;
+				el.style.transition = 'transform ' + (lifetime/1000) + 's cubic-bezier(.2,.8,.2,1), opacity ' + (lifetime/1000) + 's linear';
+				requestAnimationFrame(function(){
+					el.style.transform = 'translate(' + dx + 'px, -' + (150 + Math.random()*240) + 'px) rotate(' + rot + 'deg) scale(0.7)';
+					el.style.opacity = '0';
+				});
+				setTimeout(function(){ try{ document.body.removeChild(el);}catch(e){} }, lifetime + 400);
+				return el;
+			}
+
+			// Burst of hearts on #icon click
+			function burstHearts(originEl, count){
+				var rect = originEl.getBoundingClientRect();
+				for(var i=0;i<count;i++){
+					(function(i){
+						setTimeout(function(){
+							var cx = rect.left + rect.width/2 + (Math.random()-0.5)*40;
+							var cy = rect.top + rect.height/2 + (Math.random()-0.5)*20;
+							var size = 12 + Math.random()*20;
+							var colors = ['#ff6b81','#ff9a9e','#ffd166','#ffb4a2','#f7aef8'];
+							spawnHeart(cx, cy, size, colors[Math.floor(Math.random()*colors.length)], 1800 + Math.random()*1200);
+						}, i*30);
+					})(i);
+				}
+			}
+
+			// denser drifting hearts periodically (multiple per tick)
+			setInterval(function(){
+				var w = window.innerWidth; var h = window.innerHeight;
+				var spawnCount = 2 + Math.floor(Math.random()*3); // 2-4 hearts per tick
+				var colors = ['#ff6b81','#ff9a9e','#ffd166','#ffb4a2','#f7aef8'];
+				for(var i=0;i<spawnCount;i++){
+					var x = Math.random()*w;
+					var y = h - 10 - Math.random()*60;
+					var size = 8 + Math.random()*14;
+					var el = spawnHeart(x,y,size, colors[Math.floor(Math.random()*colors.length)], 3500 + Math.random()*3000);
+					if(el) el.classList.add('tiny-heart');
+				}
+			}, 250);
+
+			// pulse icon gently
+			var iconEl = document.getElementById('icon');
+			if(iconEl){ iconEl.classList.add('pulse'); iconEl.addEventListener('click', function(e){ burstHearts(iconEl, 40); }); }
+
+			</script>
+
+			<script type="text/javascript">
+			var offsetX = $("#loveHeart").width() / 2;
+			var offsetY = $("#loveHeart").height() / 2 - 55;
+var together = new Date();
+together.setFullYear(2025, 3, 25);
+together.setHours(0);
+together.setMinutes(0);
+together.setSeconds(0);
+together.setMilliseconds(0);
+
+if (!document.createElement('canvas').getContext) {
+	var msg = document.createElement("div");
+	msg.id = "errorMsg";
+	msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+	document.body.appendChild(msg);
+	$("#code").css("display", "none")
+	$("#copyright").css("position", "absolute");
+	$("#copyright").css("bottom", "10px");
+	document.execCommand("stop");
+} else {
+	setTimeout(function () {
+		startHeartAnimation();
+	}, 5000);
+
+	timeElapse(together);
+	setInterval(function () {
+		timeElapse(together);
+	}, 500);
+
+	adjustCodePosition();
+	$("#code").typewriter();
+}
+</script>
+<!-- Side image columns (left & right) -->
+<style>
+.side-images{position:fixed;top:8%;bottom:8%;width:150px;display:block;z-index:9996;pointer-events:auto}
+.side-images .col{position:absolute;top:0;left:0;right:0;overflow:hidden;height:100%}
+.side-images.left{left:12px}
+.side-images.right{right:12px}
+.side-images .marquee{display:flex;flex-direction:column;gap:12px;align-items:center}
+.side-images img{width:100%;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,0.18);display:block}
+.side-images .marquee.scroll-up{animation:scrollUp 16s linear infinite}
+.side-images .marquee.scroll-down{animation:scrollDown 16s linear infinite}
+@keyframes scrollUp{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+@keyframes scrollDown{0%{transform:translateY(-50%)}100%{transform:translateY(0)}}
+</style>
+
+<!-- Make marquee continuous by cloning items to fill the column and setting animation duration -->
+<script>
+(function(){
+	var marquees = document.querySelectorAll('.side-images .marquee');
+	marquees.forEach(function(m){
+		var col = m.parentElement; // .col
+		if(!col) return;
+		var target = col.clientHeight * 2;
+		// collect original children to clone
+		var originals = Array.from(m.children);
+		var safety = 0;
+		while(m.scrollHeight < target && safety < 200){
+			var node = originals[safety % originals.length].cloneNode(true);
+			m.appendChild(node);
+			safety++;
+		}
+		// set a duration proportional to the content height for smooth scrolling
+		var speed = 40; // pixels per second, tweakable
+		var duration = Math.max(8, Math.round(m.scrollHeight / speed));
+		m.style.animationDuration = duration + 's';
+	});
+})();
+</script>
+
+<!-- Left column: use images in project root (1f-3f) -->
+<div class="side-images left" aria-hidden="true">
+	<div class="col">
+		<div class="marquee scroll-up">
+			<img src="1f.jpeg" alt=""/>
+			<img src="2f.jpeg" alt=""/>
+			<img src="3f.jpeg" alt=""/>
+			<img src="1f.jpeg" alt=""/>
+			<img src="2f.jpeg" alt=""/>
+			<img src="3f.jpeg" alt=""/>
+		</div>
+	</div>
+</div>
+
+<!-- Right column: use images in project root (4f-6f) -->
+<div class="side-images right" aria-hidden="true">
+	<div class="col">
+		<div class="marquee scroll-down">
+			<img src="4f.jpeg" alt=""/>
+			<img src="5f.jpeg" alt=""/>
+			<img src="6f.jpeg" alt=""/>
+			<img src="4f.jpeg" alt=""/>
+			<img src="5f.jpeg" alt=""/>
+			<img src="6f.jpeg" alt=""/>
+		</div>
+	</div>
+</div>
+<!-- Translate time labels to Italian: Giorni, Ore, Minuti e Secondi -->
+<script>
+	(function(){
+		function translateElapse(){
+			var el = document.getElementById('elapseClock');
+			if(!el) return;
+			var s = el.innerHTML;
+			if(!s) return;
+			s = s.replace(/\bdays?\b/gi,'Giorni')
+					 .replace(/\bhours?\b/gi,'Ore')
+					 .replace(/\bminutes?\b/gi,'Minuti')
+					 .replace(/\bseconds?\b/gi,'Secondi');
+			el.innerHTML = s;
+		}
+		setInterval(translateElapse,500);
+		// also run once on load
+		window.addEventListener('load', translateElapse);
+	})();
+</script>
+</body>
+</html>
